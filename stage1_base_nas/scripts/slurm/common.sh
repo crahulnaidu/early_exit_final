@@ -1,0 +1,27 @@
+# Sourced by every job script: environment + header (nvidia-smi, git commit, seed) + run() helper.
+WORK_DIR=/home1/jtt/early_exit_final/stage1_base_nas
+cd "$WORK_DIR"
+mkdir -p "$WORK_DIR/tmp" && export TMPDIR="$WORK_DIR/tmp"
+source /home1/jtt/early_exit_final/.venv/bin/activate   # shared venv of early_exit_final
+set -euo pipefail
+export PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
+SEED=42
+
+echo "===== JOB INFO ====="
+echo "Job      : ${SLURM_JOB_NAME:-?} (${SLURM_JOB_ID:-none})"
+echo "Node     : $(hostname)"
+echo "Start    : $(date)"
+echo "Git      : $(git rev-parse HEAD)"
+echo "Dirty    : $(git status --porcelain --untracked-files=no | wc -l) modified tracked files"
+echo "Seed     : $SEED"
+echo "Python   : $(which python)"
+echo "TMPDIR   : $TMPDIR"
+nvidia-smi
+python -c "import torch; print('torch', torch.__version__, '| cuda', torch.cuda.is_available(), '|', torch.cuda.get_device_name(0) if torch.cuda.is_available() else '-')"
+echo "===================="
+
+run() {
+    echo ">>> $(date +%T) $*"
+    "$@"
+    echo "<<< $(date +%T) exit 0: $*"
+}

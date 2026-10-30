@@ -6,3 +6,26 @@ __pycache__/
 .mypy_cache/
 .DS_Store
 .env
+
+# Datasets and machine-specific external paths
+data/
+**/data/
+**/checkpoints/
+*.pt
+*.pth
+*.ckpt
+
+# Python caches and environments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+.env
+
+# Generated experiment artifacts
+outputs/
+runs/
+wandb/
