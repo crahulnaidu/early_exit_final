@@ -94,10 +94,10 @@ def main():
     clean_correct_by_method = {}
     clean_accuracy_by_method = {}
     for name, cal in methods.items():
-        e, p, _ = route(cal, val_logits, args.alpha)
-        clean_correct_by_method[name] = (e >= 0) & p.eq(yv)
+        # SDC denominator must use the SAME test images under the clean model, not the validation split.
         e_test, p_test, _ = route(cal, test_logits_clean, args.alpha)
-        clean_accuracy_by_method[name] = 100.0 * float(((e_test >= 0) & p_test.eq(yt)).float().mean())
+        clean_correct_by_method[name] = (e_test >= 0) & p_test.eq(yt)
+        clean_accuracy_by_method[name] = 100.0 * float(clean_correct_by_method[name].float().mean())
 
     val_files = {p.name: p for p in (root / "val").glob("*.npy")}
     test_files = sorted((root / "test").glob("*.npy"))
