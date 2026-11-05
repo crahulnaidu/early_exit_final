@@ -128,7 +128,7 @@ def logits_for_layer(model, evaluator, layer_name, captured_inputs, images, batc
         logits[head_idx] = torch.cat(chunks, dim=0)
         return logits
 
-    if layer_name.startswith("classifier."):
+    if layer_name == "classifier" or layer_name.startswith("classifier."):
         # The parent classifier's pre-hook caches its input for this module name.
         # The caller stores that tensor under the synthetic key "classifier".
         flat = torch.cat(captured_inputs, dim=0).to(next(model.parameters()).device)
