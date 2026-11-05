@@ -129,6 +129,7 @@ def main():
                 if S is None:
                     e0, p0, _ = route(cal, test_logits_clean, args.alpha)
                     S = (e0 >= 0) & p0.eq(yt)
+                    clean_accuracy_by_method[name] = 100.0 * float(S.float().mean())
                 metric = route_metrics(cal, args.alpha, fault_logits, yt, S,
                                        clean_accuracy_by_method.get(name, float("nan")), device)
                 rows.append({"layer": layer, "mechanism": mechanism, "run": r + 1,
